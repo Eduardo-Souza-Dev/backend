@@ -8,7 +8,6 @@ O repositório está organizado da seguinte forma:
 
 - `/src`: Este diretório contém os arquivos fonte das APIs em JavaScript (ES6).
 - `/docs`: Aqui você encontrará a documentação detalhada das APIs, incluindo informações sobre endpoints, parâmetros, respostas e exemplos de uso.
-- `/exemplos`: Nesta pasta, há exemplos práticos de como utilizar as APIs, juntamente com códigos de amostra em diferentes linguagens de programação.
 
 ## Requisitos do Sistema
 
