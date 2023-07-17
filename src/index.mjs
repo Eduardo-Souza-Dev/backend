@@ -34,12 +34,12 @@ app.use(supabase)
 app.post('/teste/usuario',new ControleDeTeste().handle);
 
 app.get("/",(res,req)=>{
-  console.log("Testando")
+  return res.json("Hello world!")
 })
 
-app.listen(3333, () => {
-    console.log(`> Ready on http://localhost:3333`);
-});
+// app.listen(3333, () => {
+//     console.log(`> Ready on http://localhost:3333`);
+// });
 
 
 
