@@ -1,0 +1,383 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model conta_bancaria_cliente {
+  id                    BigInt              @id @default(autoincrement())
+  created_at            DateTime?           @default(now()) @db.Timestamptz(6)
+  numero_cartao         String?             @db.VarChar
+  cvv_cartao            BigInt?
+  data_expiracao        DateTime?           @db.Date
+  nome_no_cartao        String?             @db.VarChar
+  id_cliente_mensalista BigInt?
+  cliente_mensalista    cliente_mensalista? @relation(fields: [id_cliente_mensalista], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map(" conta_bancaria_cliente")
+}
+
+model funcionario {
+  id                                               BigInt               @id(map: " _pkey") @default(autoincrement())
+  created_at                                       DateTime?            @default(now()) @db.Timestamptz(6)
+  nome                                             String?              @db.VarChar
+  CPF                                              String?              @db.VarChar
+  RG                                               String?              @db.VarChar
+  telefone                                         String?              @db.VarChar
+  celular                                          String?              @db.VarChar
+  descricao                                        String?
+  login                                            String?              @db.VarChar
+  senha                                            String?              @db.VarChar
+  id_admin                                         BigInt?
+  tipo_perfil                                      BigInt?
+  admin                                            admin?               @relation(fields: [id_admin], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tipo_perfil_funcionario_tipo_perfilTotipo_perfil tipo_perfil?         @relation("funcionario_tipo_perfilTotipo_perfil", fields: [tipo_perfil], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  anti_fraude                                      anti_fraude[]
+  cliente_eventual                                 cliente_eventual[]
+  cliente_mensalista                               cliente_mensalista[]
+  nota_fatura                                      nota_fatura[]
+  orcamento                                        orcamento[]
+  plano_mensalista                                 plano_mensalista[]
+  tipo_veiculo                                     tipo_veiculo[]
+  vendas                                           vendas[]
+
+  @@map(" funcionario")
+}
+
+model admin {
+  id                   BigInt                 @id @default(autoincrement())
+  created_at           DateTime?              @default(now()) @db.Timestamptz(6)
+  nome_empresa         String?                @db.VarChar
+  razao_social         String?                @db.VarChar
+  logotipo             String?                @db.VarChar
+  nome_admin           String?                @db.VarChar
+  UF                   String?                @db.VarChar
+  endereco_empresa     String?                @db.VarChar
+  complemento_empresa  String?                @db.VarChar
+  CEP_empresa          BigInt?
+  CPF_admin            String?                @db.VarChar
+  CNPJ_admin           String?                @db.VarChar
+  CNPJ_empresa         String?                @db.VarChar
+  telefone             String?                @db.VarChar
+  telefone_empresa     String?                @db.VarChar
+  celular              String?                @db.VarChar
+  login                String?                @db.VarChar
+  senha                String?                @db.VarChar
+  latitude             String?                @db.VarChar
+  longitude            String?                @db.VarChar
+  funcionario          funcionario[]
+  conta_bancaria       conta_bancaria[]
+  orcamento            orcamento[]
+  ticket               ticket[]
+  tipo_perfil          tipo_perfil[]
+  vagas_estacionamento vagas_estacionamento[]
+}
+
+model anti_fraude {
+  id                    BigInt              @id @default(autoincrement())
+  created_at            DateTime?           @default(now()) @db.Timestamptz(6)
+  descricao             String?
+  valor                 BigInt?
+  data_ocorrido         DateTime?           @db.Date
+  comprovante           String?             @db.VarChar
+  id_cliente_eventual   BigInt?
+  id_cliente_mensalista BigInt?
+  id_funcionario        BigInt?
+  cliente_eventual      cliente_eventual?   @relation(fields: [id_cliente_eventual], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  cliente_mensalista    cliente_mensalista? @relation(fields: [id_cliente_mensalista], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  funcionario           funcionario?        @relation(fields: [id_funcionario], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model caixa {
+  id                      BigInt    @id @default(autoincrement())
+  created_at              DateTime? @default(now()) @db.Timestamptz(6)
+  dt_hora_abertura        DateTime? @db.Date
+  dt_hora_fechamento      DateTime? @db.Date
+  valor_gaveta_abertura   BigInt?
+  valor_gaveta_fechamento BigInt?
+  diferenca_gaveta        BigInt?
+  troco                   BigInt?
+  id_venda                BigInt?
+  cortesia                BigInt?
+  desconto                BigInt?
+}
+
+model cliente_app {
+  id                    BigInt              @id @default(autoincrement())
+  created_at            DateTime?           @default(now()) @db.Timestamptz(6)
+  login                 String?             @db.VarChar
+  senha                 String?             @db.VarChar
+  id_forma_pagamento    BigInt?
+  id_cliente_eventual   BigInt?
+  id_cliente_mensalista BigInt?
+  id_ticket             BigInt?
+  cliente_eventual      cliente_eventual?   @relation(fields: [id_cliente_eventual], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  cliente_mensalista    cliente_mensalista? @relation(fields: [id_cliente_mensalista], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  forma_pagamento       forma_pagamento?    @relation(fields: [id_forma_pagamento], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ticket                ticket?             @relation(fields: [id_ticket], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model cliente_eventual {
+  id                   BigInt                 @id @default(autoincrement())
+  created_at           DateTime?              @default(now()) @db.Timestamptz(6)
+  nome                 String?                @db.VarChar
+  CPF                  String?                @db.VarChar
+  CNPJ                 String?                @db.VarChar
+  RG                   String?                @db.VarChar
+  celular              String?                @db.VarChar
+  telefone             String?                @db.VarChar
+  dados_veiculo        BigInt?
+  id_funcionario       BigInt?
+  id_plano             BigInt?
+  anti_fraude          anti_fraude[]
+  cliente_app          cliente_app[]
+  veiculo              veiculo?               @relation(fields: [dados_veiculo], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  funcionario          funcionario?           @relation(fields: [id_funcionario], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  plano_mensalista     plano_mensalista?      @relation(fields: [id_plano], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  nota_fatura          nota_fatura[]
+  orcamento            orcamento[]
+  ticket               ticket[]
+  vagas_estacionamento vagas_estacionamento[]
+  vendas               vendas[]
+}
+
+model cliente_mensalista {
+  id                     BigInt                   @id @default(autoincrement())
+  created_at             DateTime?                @default(now()) @db.Timestamptz(6)
+  nome                   String?                  @db.VarChar
+  tipo_pessoa            String?                  @db.VarChar
+  CPF                    String?                  @db.VarChar
+  CNPJ                   String?                  @db.VarChar
+  numero_casa            BigInt?
+  complemento            String?                  @db.VarChar
+  bairro                 String?                  @db.VarChar
+  cidade                 String?                  @db.VarChar
+  telefone               String?                  @db.VarChar
+  celular                String?                  @db.VarChar
+  UF                     String?                  @db.VarChar
+  observacao             String?
+  dados_veiculo          BigInt?
+  id_funcionario         BigInt?
+  id_conta_bancaria      BigInt?
+  id_planos              BigInt?
+  conta_bancaria_cliente conta_bancaria_cliente[]
+  anti_fraude            anti_fraude[]
+  cliente_app            cliente_app[]
+  veiculo                veiculo?                 @relation(fields: [dados_veiculo], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  funcionario            funcionario?             @relation(fields: [id_funcionario], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  nota_fatura            nota_fatura[]
+  orcamento              orcamento[]
+  ticket                 ticket[]
+  vagas_estacionamento   vagas_estacionamento[]
+  vendas                 vendas[]
+}
+
+model conta_bancaria {
+  id             BigInt    @id @default(autoincrement())
+  id_admin       BigInt?
+  created_at     DateTime? @default(now()) @db.Timestamptz(6)
+  numero_cartao  String?   @db.VarChar
+  cvv_cartao     String?   @db.VarChar
+  data_expiracao DateTime? @db.Date
+  admin          admin?    @relation(fields: [id_admin], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model forma_pagamento {
+  id          BigInt        @id @default(autoincrement())
+  created_at  DateTime?     @default(now()) @db.Timestamptz(6)
+  nome        String?       @db.VarChar
+  descricao   String?
+  taxa        Float?        @db.Real
+  cliente_app cliente_app[]
+  orcamento   orcamento[]
+  ticket      ticket[]
+  vendas      vendas[]
+}
+
+model horario_acesso {
+  id               BigInt             @id @default(autoincrement())
+  created_at       DateTime?          @default(now()) @db.Timestamptz(6)
+  Segunda_feira    Boolean?
+  Terca_feira      Boolean?
+  Quarta_feira     Boolean?
+  Quinta_feira     Boolean?
+  Sexta_feira      Boolean?
+  Sabado           Boolean?
+  Domingo          Boolean?
+  Mes              BigInt?
+  Ano              BigInt?
+  horarios         BigInt[]
+  plano_mensalista plano_mensalista[]
+}
+
+model nota_fatura {
+  id                      BigInt              @id @default(autoincrement())
+  created_at              DateTime?           @default(now()) @db.Timestamptz(6)
+  data_entrada            DateTime?           @db.Date
+  data_saida              DateTime?           @db.Date
+  taxas                   BigInt?
+  numero_fatura_orcamento BigInt?
+  numero_fatura_ticket    BigInt?
+  id_cliente_eventual     BigInt?
+  id_cliente_mensal       BigInt?
+  id_funcionario          BigInt?
+  id_venda                BigInt?
+  id_ticket               BigInt?
+  cliente_eventual        cliente_eventual?   @relation(fields: [id_cliente_eventual], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  cliente_mensalista      cliente_mensalista? @relation(fields: [id_cliente_mensal], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  funcionario             funcionario?        @relation(fields: [id_funcionario], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ticket                  ticket?             @relation(fields: [id_ticket], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  vendas                  vendas?             @relation(fields: [id_venda], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model orcamento {
+  id                    BigInt              @id @default(autoincrement())
+  created_at            DateTime?           @default(now()) @db.Timestamptz(6)
+  data_entrada          DateTime?           @db.Date
+  data_saida            DateTime?           @db.Date
+  id_forma_pagamento    BigInt?
+  id_cliente_eventual   BigInt?
+  id_cliente_mensalista BigInt?
+  id_funcionario        BigInt?
+  id_admin              BigInt?
+  admin                 admin?              @relation(fields: [id_admin], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  cliente_eventual      cliente_eventual?   @relation(fields: [id_cliente_eventual], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  cliente_mensalista    cliente_mensalista? @relation(fields: [id_cliente_mensalista], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  forma_pagamento       forma_pagamento?    @relation(fields: [id_forma_pagamento], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  funcionario           funcionario?        @relation(fields: [id_funcionario], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model plano_mensalista {
+  id                  BigInt             @id @default(autoincrement())
+  created_at          DateTime?          @default(now()) @db.Timestamptz(6)
+  nome                String?            @db.VarChar
+  vagas               BigInt?
+  data_criacao        DateTime?          @db.Date
+  desconto_fixo       BigInt?
+  desconto_porcen     Float?             @db.Real
+  id_funcionario      BigInt?
+  id_tempo_disponivel BigInt?
+  cliente_eventual    cliente_eventual[]
+  funcionario         funcionario?       @relation(fields: [id_funcionario], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  horario_acesso      horario_acesso?    @relation(fields: [id_tempo_disponivel], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model ticket {
+  id                    BigInt              @id @default(autoincrement())
+  numeracao_ticket      BigInt?
+  created_at            DateTime?           @default(now()) @db.Timestamptz(6)
+  data_entrada          DateTime?           @map(" data_entrada") @db.Date
+  data_saida            DateTime?           @db.Date
+  termos_condicoes      String?             @db.VarChar
+  id_forma_pagamento    BigInt?
+  id_cliente_eventual   BigInt?
+  id_cliente_mensalista BigInt?
+  id_admin              BigInt?
+  cliente_app           cliente_app[]
+  nota_fatura           nota_fatura[]
+  admin                 admin?              @relation(fields: [id_admin], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  cliente_eventual      cliente_eventual?   @relation(fields: [id_cliente_eventual], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  cliente_mensalista    cliente_mensalista? @relation(fields: [id_cliente_mensalista], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  forma_pagamento       forma_pagamento?    @relation(fields: [id_forma_pagamento], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model tipo_perfil {
+  id                                               BigInt        @id @default(autoincrement())
+  id_admin                                         BigInt?
+  created_at                                       DateTime?     @default(now()) @db.Timestamptz(6)
+  nome                                             String?       @db.VarChar
+  descricao                                        String?       @db.VarChar
+  comissao                                         String?       @db.VarChar
+  caixa                                            Boolean?
+  relatorio                                        Boolean?
+  graficos                                         Boolean?
+  cadastrar_cliente                                Boolean?
+  editar_cliente                                   Boolean?
+  deletar_cliente                                  Boolean?
+  cadastrar_tipo_veiculo                           Boolean?
+  deletar_tipo_veiculo                             Boolean?
+  edita_tipo_cliente                               Boolean?
+  faturamento                                      Boolean?
+  estacionamento                                   Boolean?
+  funcionario_funcionario_tipo_perfilTotipo_perfil funcionario[] @relation("funcionario_tipo_perfilTotipo_perfil")
+  admin                                            admin?        @relation(fields: [id_admin], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model tipo_veiculo {
+  id                   BigInt       @id @default(autoincrement())
+  created_at           DateTime?    @default(now()) @db.Timestamptz(6)
+  nome                 String?      @db.VarChar
+  descricao            String?
+  cortesia             BigInt?
+  minuto_tolerancia    BigInt?
+  primeiros_15_minutos BigInt?
+  primeiros_30_minutos BigInt?
+  valor_hora           BigInt?
+  valor_diaria         BigInt?
+  periodo_entrada      DateTime?    @db.Date
+  periodo_saida        DateTime?    @db.Date
+  id_funcionario       BigInt?
+  funcionario          funcionario? @relation(fields: [id_funcionario], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model vagas_estacionamento {
+  id                            BigInt              @id @default(autoincrement())
+  created_at                    DateTime?           @default(now()) @db.Timestamptz(6)
+  vagas_totais                  BigInt?
+  quantidade_vagas              BigInt?
+  vagas_prefenciais_total       BigInt?
+  vagas_quantidade_tipo_veiculo BigInt?
+  vagas_totais_tipo_veiculo     BigInt?
+  status_vaga                   BigInt?
+  id_cliente_mensalista         BigInt?
+  id_cliente_eventual           BigInt?
+  id_veiculo                    BigInt?
+  id_admin                      BigInt?
+  admin                         admin?              @relation(fields: [id_admin], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  cliente_eventual              cliente_eventual?   @relation(fields: [id_cliente_eventual], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  cliente_mensalista            cliente_mensalista? @relation(fields: [id_cliente_mensalista], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  veiculo                       veiculo?            @relation(fields: [id_veiculo], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model veiculo {
+  id                   BigInt                 @id @default(autoincrement())
+  created_at           DateTime?              @default(now()) @db.Timestamptz(6)
+  placa                String?                @db.VarChar
+  marca                String?                @db.VarChar
+  cor                  String?                @db.VarChar
+  modelo               String?                @db.VarChar
+  imagem_veiculo       String?                @db.VarChar
+  ano                  BigInt?
+  id_tipo_veiculo      BigInt?
+  cliente_eventual     cliente_eventual[]
+  cliente_mensalista   cliente_mensalista[]
+  vagas_estacionamento vagas_estacionamento[]
+}
+
+model vendas {
+  id                  BigInt              @id @default(autoincrement())
+  created_at          DateTime?           @default(now()) @db.Timestamptz(6)
+  dt_entrada_venda    DateTime?           @db.Date
+  dt_saida_venda      DateTime?           @db.Date
+  valor_venda         BigInt?
+  total_a_pagar       BigInt?
+  id_forma_pagamento  BigInt?
+  id_cliente_mensal   BigInt?
+  id_cliente_eventual BigInt?
+  id_funcionario      BigInt?
+  nota_fatura         nota_fatura[]
+  cliente_eventual    cliente_eventual?   @relation(fields: [id_cliente_eventual], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  cliente_mensalista  cliente_mensalista? @relation(fields: [id_cliente_mensal], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  forma_pagamento     forma_pagamento?    @relation(fields: [id_forma_pagamento], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  funcionario         funcionario?        @relation(fields: [id_funcionario], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model tabela_de_teste {
+  id         BigInt    @id @default(autoincrement())
+  created_at DateTime? @default(now()) @db.Timestamptz(6)
+  nome       String?   @db.VarChar
+  email      String?   @db.VarChar
+}

@@ -1,0 +1,25 @@
+# Arquivos gerados pela execução do código
+dist/
+build/
+
+# Dependências do Node.js
+node_modules/
+
+# Arquivos de configuração local
+.env
+
+# Arquivos de log
+*.log
+
+# Arquivos temporários
+*.tmp
+*.temp
+*.swp
+
+# Arquivos de configuração do editor
+.vscode/
+.idea/
+
+# Arquivos de backup
+*~
+*.bak
