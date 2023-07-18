@@ -43,6 +43,10 @@ app.get("/",(req,res)=>{
 //     console.log(`> Ready on http://localhost:3333`);
 // });
 
+app.listen(port,() =>{
+  console.log("Esta indo agora")
+})
+
 
 
 export { app }
