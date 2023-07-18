@@ -8,7 +8,7 @@
     "node": "18.x"
   },
   "scripts": {
-    "start": "node ./index.mjs",
+    "start": "node src/index.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
