@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js'
 import bodyParser from 'body-parser';
 import express from 'express'
 import morgan from 'morgan'
-import { ControleDeTeste } from './src/controllers/ControleDeTeste.mjs'
+import { ControleDeTeste } from './controllers/ControleDeTeste.mjs'
 import cors from 'cors';
 
 
