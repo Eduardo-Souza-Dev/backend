@@ -28,12 +28,12 @@ app.use(morgan('combined'));
 app.use(cors())
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-app.use(supabase)
+
 
 
 app.post('/teste/usuario',new ControleDeTeste().handle);
 
-app.get("/",(res,req)=>{
+app.get("/",(req,res)=>{
   return res.json("Hello world!")
 })
 
