@@ -8,8 +8,8 @@ import cors from 'cors';
 
 
 
-const supabaseUrl = "https://vtdnjwhphkxsgfculrsn.supabase.co"
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0ZG5qd2hwaGt4c2dmY3VscnNuIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODc5NjU0NjUsImV4cCI6MjAwMzU0MTQ2NX0.cQaYd3JY-5C39T9WCVKNBzP3ymJvBImh8eqPHzwsmcw"
+const supabaseUrl = process.env.SUPABASE_URL
+const supabaseKey = process.env.SUPABASE_KEY
 
 
 const supabase = createClient(supabaseUrl, supabaseKey, {
