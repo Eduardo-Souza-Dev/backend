@@ -38,6 +38,10 @@ app.get("/",(req,res)=>{
   return res.json("Hello world!")
 })
 
+app.get("/testando",(req,res)=>{
+  return res.json("Testando essa rota")
+})
+
 // app.listen(3333, () => {
 //     console.log(`> Ready on http://localhost:3333`);
 // });
