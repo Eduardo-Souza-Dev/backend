@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import express from 'express'
 import morgan from 'morgan'
 import { ControleDeTeste } from './controllers/ControleDeTeste.mjs'
+import { admin_register_controller } from './controllers/admin/admin_register_controller.mjs';
 import cors from 'cors';
 
 
@@ -33,6 +34,7 @@ const port = process.env.PORT  || 3001
 
 
 app.post('/teste/usuario',new ControleDeTeste().handle);
+app.post('/cadastro/admin', new admin_register_controller().handle)
 
 app.get("/",(req,res)=>{
   return res.json("Hello world!")
@@ -42,13 +44,10 @@ app.get("/testando",(req,res)=>{
   return res.json("Testando essa rota")
 })
 
-// app.listen(3333, () => {
-//     console.log(`> Ready on http://localhost:3333`);
-// });
+app.listen(3333, () => {
+    console.log(`> Ready on http://localhost:3333`);
+});
 
-app.listen(port,() =>{
-  console.log("Esta indo agora")
-})
 
 
 
