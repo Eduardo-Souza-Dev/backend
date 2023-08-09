@@ -1,19 +1,35 @@
-const app = express();
+import { createClient } from '@supabase/supabase-js'
+import bodyParser from 'body-parser';
+import express from 'express'
+import morgan from 'morgan'
+import admin_register_controller from './controllers/admin/admin_register_controller.mjs';
+import cors from 'cors';
 
-app.use(express.json());
 
 
-app.use((err,req ,res) =>{
-   
-    if(err instanceof Error){
-        return res.status(400).json({
-            err: err.message
-        })
+const supabaseUrl = process.env.SUPABASE_URL
+const supabaseKey = process.env.SUPABASE_KEY
+
+
+const supabase = createClient(supabaseUrl, supabaseKey, {
+    auth: {
+      autoRefreshToken: true,
+      persistSession: false,
+      detectSessionInUrl: true
     }
+    
+  })
 
-    return res.status(500).json({
-        status: 'error',
-        message: 'Internal Server Error'
-    })
 
-})
+const app = express()
+app.use(morgan('combined'));
+app.use(cors())
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+
+app.post('/cadastro/admin', new admin_register_controller().handle)
+
+//Por não ter a porta ele não esta conenctando ao server ajusatr isso
+
+export { app };
+export default supabase;

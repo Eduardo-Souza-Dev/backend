@@ -1,4 +1,4 @@
-import supabase from "../../index.mjs";
+import supabase from "../../server.mjs";
 import { hash } from "bcrypt";
 
 class admin_register_service{
@@ -12,9 +12,10 @@ class admin_register_service{
         //Verifica se o email já existe, caso sim da um erro caso não executa o insert
       
         if(data.length > 0){
-            console.log(data)
-            throw new Error("Login já existe!")
+            throw new Error("Login já existe!");
         }
+
+        return login;
     }
 
     async hash_senha(senha){

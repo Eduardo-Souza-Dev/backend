@@ -35,4 +35,4 @@ class admin_register_controller{
    
 }
 
-export { admin_register_controller }
+export default admin_register_controller 

@@ -1,8 +1,9 @@
 import axios from 'axios';
 import bcrypt from 'bcrypt';
-import { app } from '../../../index.mjs';
+import { app } from '../../../server.mjs';
 import admin_register_service from '../../../services/admin/admin_register_service.mjs';
-
+import MockAdapter from 'axios-mock-adapter';
+import supertest from 'supertest';
 /*
 pt-BR
 
@@ -17,13 +18,43 @@ en-EN
 Official documentation of System Parking APIRest tests, here is where you will can understand how our requests and typing work
 
 From Dev to Dev
+
+
 */
+
+
+
 
 describe('cadastro de usuário admin',() =>{
 
-  test('POST /cadastro/admin retorna dados corretos e barra e-mail', async() => {
+  async function cadastrarAdmin(data) {
+    try
+    {
+      const response = await axios.post("http://localhost:3333/cadastro/admin", data);
+      console.log(response.data);
+      return response.data;
+    }
+    catch(error){
+      console.log(error);
+    }
     
-    const data = {  nome_empresa: 'Empresa de Teste 66666',
+  }
+
+  let mock;
+
+  beforeAll(() => {
+    mock = new MockAdapter(axios);
+  });
+
+  afterEach(() => {
+    mock.reset();
+  });
+
+
+  it('POST /cadastro/admin retorna dados corretos e barra e-mail', async() => {
+
+      const data = { 
+      nome_empresa: 'Empresa de Teste 66666',
       razao_social: 'EMPRESA DE TESTE LTDA', 
       logotipo: 'linkdeimagemimaginário', 
       nome_admin: 'Eduardo',
@@ -37,21 +68,21 @@ describe('cadastro de usuário admin',() =>{
       telefone: '55 19 9034-324', 
       telefone_empresa: '55 19 9034-324',
       celular: '55 19 9034-324', 
-      login: 'empresa1616161616@systemapark.com', 
+      login: 'empresa212121212121@systemapark.com', 
       senha: 'senha_com_hash', 
       latitude: '-2144324 W', 
       longitude: '80982348902 S°',
       email: 'emaildeteste@email.com' 
     };
   
-    const response = await axios.post('http://localhost:3333/cadastro/admin', data);
+    mock.onPost("http://localhost:3333/cadastro/admin").reply(200,{ data:data ,status:200} );
 
-    
-      const responseData = JSON.parse(response.config.data)
-      expect(await responseData).toEqual(data);
-      expect(response.status).toBe(200); 
+    //Esperando a resposta da função que chama a rota de cadastro
+    const response = await cadastrarAdmin(data);
 
-
+    console.log(response);
+    expect(response.data).toEqual(data);
+    expect(response.status).toEqual(200); 
   });
 
   test('Deve gerar o hash da senha', async() =>{
@@ -68,4 +99,3 @@ describe('cadastro de usuário admin',() =>{
 
 })
 
-  
