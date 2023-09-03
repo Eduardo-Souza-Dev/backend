@@ -30,7 +30,7 @@ describe('cadastro de usuário admin',() =>{
   async function cadastrarAdmin(data) {
     try
     {
-      const response = await axios.post("http://localhost:3333/cadastro/admin", data);
+      const response = await axios.post("http://localhost:3000/cadastro/admin", data);
       console.log(response.data);
       return response.data;
     }
@@ -72,10 +72,11 @@ describe('cadastro de usuário admin',() =>{
       senha: 'senha_com_hash', 
       latitude: '-2144324 W', 
       longitude: '80982348902 S°',
-      email: 'emaildeteste@email.com' 
+      email: 'emaildeteste@email.com',
+      numero_endereco:'31' 
     };
   
-    mock.onPost("http://localhost:3333/cadastro/admin").reply(200,{ data:data ,status:200} );
+    mock.onPost("http://localhost:3000/cadastro/admin").reply(200,{ data:data ,status:200} );
 
     //Esperando a resposta da função que chama a rota de cadastro
     const response = await cadastrarAdmin(data);

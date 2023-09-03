@@ -29,7 +29,7 @@ app.use(bodyParser.json());
 
 app.post('/cadastro/admin', new admin_register_controller().handle)
 
-//Por não ter a porta ele não esta conenctando ao server ajusatr isso
+
 
 export { app };
 export default supabase;

@@ -15,6 +15,10 @@ class admin_register_service{
             throw new Error("Login já existe!");
         }
 
+        if(error){
+            throw new Error(error);
+        }
+
         return login;
     }
 
@@ -29,7 +33,7 @@ class admin_register_service{
        await this.verifica_login(login)
 
        //Chamada da função para fazer hash na senha
-       const passwordHash = await this.hash_senha(senha)
+       const passwordHash = this.hash_senha(senha)
     
 
         const { data, error } = await supabase
