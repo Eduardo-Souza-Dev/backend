@@ -33,7 +33,7 @@ class admin_register_service{
        await this.verifica_login(login)
 
        //Chamada da função para fazer hash na senha
-       const passwordHash = this.hash_senha(senha)
+       const passwordHash = await this.hash_senha(senha)
     
 
         const { data, error } = await supabase
@@ -63,12 +63,6 @@ class admin_register_service{
         ])
         .select()
 
-            if(error){
-                console.log(error)
-            }
-            else{
-                console.log(data)     
-            }
 
     }
 
