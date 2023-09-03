@@ -63,6 +63,12 @@ class admin_register_service{
         ])
         .select()
 
+        try{
+            return data
+        }catch(error){
+            throw new Error("Erro ao cadastrar usuário")
+        }
+
 
     }
 
