@@ -27,7 +27,7 @@ class admin_register_service{
         return hashing
     }
 
-    async execute(nomeEmpresa = String, razaoSocial = String, logotipo = String, nomeAdmin = String, UF = String, enderecoEmpresa = String, complementoEmpresa = String, CEP_empresa = String, CPF_admin = String, CNPJ_admin, CNPJ_empresa, telefone = String, telefoneEmpresa = String, celular = String, login = String, senha = String, latitude = String, longitude = String, email = String){
+    async execute(nomeEmpresa, razaoSocial, logotipo, nomeAdmin, UF, enderecoEmpresa, complementoEmpresa, CEP_empresa, CPF_admin, CNPJ_admin, CNPJ_empresa, telefone, telefoneEmpresa, celular, login, senha, latitude, longitude, email){
 
        //Chamada da função para verificar e-mail 
        await this.verifica_login(login)
@@ -74,5 +74,6 @@ class admin_register_service{
 
    
 }
+
 
 export default admin_register_service
